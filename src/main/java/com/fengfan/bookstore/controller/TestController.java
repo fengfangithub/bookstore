@@ -1,7 +1,9 @@
 package com.fengfan.bookstore.controller;
 
+
 import com.fengfan.bookstore.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Description TODO
  * @Version 1.0
  **/
+@Controller
 public class TestController {
 
     @Autowired
@@ -19,8 +22,9 @@ public class TestController {
 
     @RequestMapping(value = "/test")
     @ResponseBody
-    public void test(){
+    public void test() throws Exception {
         System.out.println();
+        System.out.println(testService.select());
         System.out.println("hello world");
     }
 }

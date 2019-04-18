@@ -6,6 +6,6 @@
 
     <!-- 配置类型别名 -->
     <typeAliases>
-        <package name="com.fengfan.bookstore.pojo"/>
+        <package name="com.fengfan.bookstore.entity"/>
     </typeAliases>
 </configuration>
