@@ -22,7 +22,7 @@ public interface CommentImgDao {
      * @Description 根据评论ID查询评论图片
      * @Exception
      **/
-    List<CommentImgEntity> selectComentImgs(@Param("commentID") int commentID) throws Exception;
+    List<CommentImgEntity> selectCommentImage(@Param("commentID") int commentID) throws Exception;
 
     /**
      * @return
@@ -32,5 +32,5 @@ public interface CommentImgDao {
      * @Description 插入用户评价图片
      * @Exception
      **/
-    int insertCommentImg(CommentImgEntity commentImgEntity) throws Exception;
+    int insertCommentImage(CommentImgEntity commentImgEntity) throws Exception;
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengfan.bookstore.dao.CollectionDao">
+
+    <insert id="insertCollection" parameterType="collectionEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_collection (book_shelves_id, user_id) values (#{bookShelvesID},#{userID})
+    </insert>
+
+    <update id="deleteCollection">
+        update tb_collection set is_delete = 1 where id = #{id}
+    </update>
+
+    <select id="selectCollection" resultMap="collection">
+        select * from tb_collection where user_id = #{userID} and is_delete = 0
+    </select>
+
+    <select id="selectByBookID" resultMap="collection">
+        select * from tb_collection where user_id = #{userID} and book_shelves_id = #{bookShelvesID} and is_delete = 0
+    </select>
+
+    <resultMap id="collection" type="com.fengfan.bookstore.entity.CollectionEntity">
+        <id property="id" column="id"/>
+        <result property="bookShelvesID" column="book_shelves_id"/>
+        <result property="userID" column="user_id"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+</mapper>

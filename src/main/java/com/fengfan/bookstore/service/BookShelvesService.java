@@ -1,8 +1,10 @@
 package com.fengfan.bookstore.service;
 
 import com.fengfan.bookstore.entity.CategoryEntity;
+import com.fengfan.bookstore.vo.BookShelvesClassVo;
 import com.fengfan.bookstore.vo.BookShelvesVo;
-import com.fengfan.bookstore.vo.BookShelvesVoList;
+import com.fengfan.bookstore.vo.BookShelvesListVo;
+import com.fengfan.bookstore.vo.IndexBookVo;
 
 import java.util.List;
 
@@ -31,10 +33,10 @@ public interface BookShelvesService {
      * @Author fengfan
      * @Date 2019/4/18 16:12
      * @Paran
-     * @Description 查询上架书列表
+     * @Description 查询上架书分类列表
      * @Exception
      **/
-    List<BookShelvesVoList> queryBookShelvesList(int categoryID, int page) throws Exception;
+    IndexBookVo queryBookShelvesList() throws Exception;
 
     /**
      * @return
@@ -44,7 +46,7 @@ public interface BookShelvesService {
      * @Description 模糊查询书籍
      * @Exception
      **/
-    List<BookShelvesVoList> queryFuzzyBookShelvesList(String keyword, int page) throws Exception;
+    List<BookShelvesListVo> queryFuzzyBookShelvesList(String keyword) throws Exception;
 
     /**
      * @return
@@ -54,6 +56,26 @@ public interface BookShelvesService {
      * @Description 上架信息
      * @Exception
      **/
-    BookShelvesVo queryBookShelves(int bookShelvesID) throws Exception;
+    BookShelvesVo queryBookShelves(int bookShelvesID, int UserID) throws Exception;
+
+    /**
+     * @Author fengfan
+     * @Date 2019/5/9 18:19
+     * @Paran
+     * @return
+     * @Description 查询主页分类列表
+     * @Exception
+     **/
+    IndexBookVo queryIndexBook() throws Exception;
+
+    /**
+     * @Author fengfan
+     * @Date 2019/5/9 18:23
+     * @Paran
+     * @return
+     * @Description 根据分类和排序查询书
+     * @Exception
+     **/
+    BookShelvesClassVo queryClassBook(int categoryID) throws Exception;
 
 }

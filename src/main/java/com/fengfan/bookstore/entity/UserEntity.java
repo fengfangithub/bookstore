@@ -13,10 +13,12 @@ public class UserEntity {
     private int id;  //用户id
     private String name;  //用户名
     private int sex;  //用户性别
+    private String phone;
     private String payPassword;  //用户支付密码
     private int points;  //拥有积分
     private BigDecimal balance;  //拥有余额
     private String openID;  //用户唯一标识
+    private String wxPassword;  //微信支付密码
 
     public int getId() {
         return id;
@@ -32,6 +34,14 @@ public class UserEntity {
 
     public void setPayPassword(String payPassword) {
         this.payPassword = payPassword;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public int getPoints() {
@@ -72,5 +82,13 @@ public class UserEntity {
 
     public void setSex(int sex) {
         this.sex = sex;
+    }
+
+    public String getWxPassword() {
+        return wxPassword;
+    }
+
+    public void setWxPassword(String wxPassword) {
+        this.wxPassword = wxPassword;
     }
 }

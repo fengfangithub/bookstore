@@ -3,31 +3,57 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fengfan.bookstore.dao.OrderDao">
 
-    <!-- 查询订单列表 -->
+    <!-- 查询未付款订单列表 -->
+    <select id="selectNoPayOrderList" resultMap="order">
+        select * from tb_order where user_id = #{userID} and state = 1 and is_delete = 0
+    </select>
+
+    <!-- 查询待发货订单列表 -->
+    <select id="selectDeliveryOrderList" resultMap="order">
+        select * from tb_order where user_id = #{userID} and state = 2 and is_delete = 0
+    </select>
+
+    <!-- 查询待收货订单列表 -->
+    <select id="selectTakeOrderList" resultMap="order">
+        select * from tb_order where user_id = #{userID} and state = 3 and is_delete = 0
+    </select>
+
+    <!-- 查询完成订单列表 -->
+    <select id="selectCompleteOrderList" resultMap="order">
+        select * from tb_order where user_id = #{userID} and state = 4 and is_delete = 0
+    </select>
+
+    <!-- 查询售后服务订单 -->
+    <select id="selectAfterSalesOrderList" resultMap="order">
+        select * from tb_order where user_id = #{userID} and state = 5 and is_delete = 0
+    </select>
+
+    <!-- 根据ID查询订单 -->
     <select id="selectOrder" resultMap="order">
-        select * from tb_order where user_id = #{userID} and is_delete != 1
+        select * from tb_order where id = #{orderID} and is_delete =0
     </select>
 
     <!-- 添加一个订单 -->
-    <insert id="insertAddress" parameterType="orderEntity">
+    <insert id="insertOrder" parameterType="orderEntity">
         insert into tb_order
-        (number, price, order_number, create_date, state, book_shelves_id, user_id) values
-        (#{number},#{price},#{orderNumber},#{createDate},#{state},#{bookShelvesID},#{userID})
+        (number, price, order_number, create_date, leave_message, state, book_shelves_id,address_id, user_id) values
+        (#{number},#{price},#{orderNumber},sysdate(),#{leaveMessage},#{state},#{bookShelvesID},#{addressID},#{userID})
     </insert>
 
     <!-- 修改订单信息 -->
-    <update id="udateAddress" parameterType="orderEntity">
+    <update id="updateOrder" parameterType="orderEntity">
         update tb_order
         <set>
             <if test="number != null and number != 0">number = #{number},</if>
             <if test="price != null and price != 0">price = #{price},</if>
             <if test="orderNumber != null">order_number = #{orderNumber},</if>
             <if test="createDate != null">create_date = #{createDate},</if>
-            <if test="sate != null and state != 0">state = #{state},</if>
+            <if test="state != null and state != 0">state = #{state},</if>
             <if test="isDelete != null and isDelete != 0">is_delete = #{isDelete},</if>
-            <if test="bookShelvesID != null and bookShelvesID != 0">book_shelves_id = #{bookShelvesID}</if>
+            <if test="bookShelvesID != null and bookShelvesID != 0">book_shelves_id = #{bookShelvesID},</if>
+            <if test="isComment != null and isComment != 0">is_comment = #{isComment}</if>
         </set>
-        where id = #{id}
+        where id = #{id} and user_id = #{userID}
     </update>
 
     <resultMap id="order" type="com.fengfan.bookstore.entity.OrderEntity">
@@ -40,5 +66,6 @@
         <result property="isDelete" column="is_delete"/>
         <result property="bookShelvesID" column="book_shelves_id"/>
         <result property="userID" column="user_id"/>
+        <result property="isComment" column="is_comment"/>
     </resultMap>
 </mapper>

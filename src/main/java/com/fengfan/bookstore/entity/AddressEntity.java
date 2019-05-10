@@ -99,4 +99,12 @@ public class AddressEntity {
     public void setIsDelete(int isDelete) {
         this.isDelete = isDelete;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

@@ -2,9 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fengfan.bookstore.dao.CommentDao">
+
+    <insert id="insertComment" parameterType="commentEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_comment (user_name, user_url, star, content, create_date, book_shelves_id)
+        values (#{userName},#{userUrl},#{star},#{content},sysdate(),#{bookShelvesID})
+    </insert>
+
     <!-- 根据上架ID查询评论 -->
     <select id="selectComments" resultMap="comments">
         select * from tb_comment where book_shelves_id = #{bookShelvesID}
+    </select>
+
+    <!-- 根据上架ID查询好评 -->
+    <select id="selectHighReview" resultMap="comments">
+        select * from tb_comment where book_shelves_id = #{bookShelvesID} and star = 5
+    </select>
+
+    <!-- 根据上架ID查询中评 -->
+    <select id="selectMediumReview" resultMap="comments">
+        select * from tb_comment where book_shelves_id = #{bookShelvesID} and star between 3 and 4
+    </select>
+
+    <!-- 根据上架ID查询差评 -->
+    <select id="selectBadReview" resultMap="comments">
+        select * from tb_comment where book_shelves_id = #{bookShelvesID} and star between 1 and 2
     </select>
 
     <resultMap id="comments" type="com.fengfan.bookstore.entity.CommentEntity">
@@ -12,9 +33,8 @@
         <result property="userName" column="user_name"/>
         <result property="userUrl" column="user_url"/>
         <result property="star" column="star"/>
-        <result property="level" column="level"/>
         <result property="content" column="content"/>
-        <result property="createTime" column="create_time"/>
+        <result property="createDate" column="create_date"/>
         <result property="bookShelvesID" column="book_shelves_id"/>
         <result property="isDelete" column="is_delete"/>
     </resultMap>

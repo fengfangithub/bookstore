@@ -9,11 +9,14 @@ package com.fengfan.bookstore.vo;
  **/
 public class WXUserVo {
     private String session_key;
-    private String open_id;
+    private String openid;
 
-    public WXUserVo(String session_key, String open_id) {
+    public WXUserVo() {
+    }
+
+    public WXUserVo(String session_key, String openid) {
         this.session_key = session_key;
-        this.open_id = open_id;
+        this.openid = openid;
     }
 
     public String getSession_key() {
@@ -24,11 +27,11 @@ public class WXUserVo {
         this.session_key = session_key;
     }
 
-    public String getOpen_id() {
-        return open_id;
+    public String getOpenid() {
+        return openid;
     }
 
-    public void setOpen_id(String open_id) {
-        this.open_id = open_id;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 }

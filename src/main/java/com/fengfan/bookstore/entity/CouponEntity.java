@@ -11,10 +11,10 @@ import java.math.BigDecimal;
  **/
 public class CouponEntity {
     private int id;  //优惠券ID
-    private int needPoins;  //需要积分
+    private int needPoints;  //需要积分
     private int duration;  //优惠券时间
     private BigDecimal full;  //满多少元能用
-    private BigDecimal substract;  //减多少元
+    private BigDecimal subtract;  //减多少元
     private int isDelete;  //是否删除
 
     public int getId() {
@@ -25,12 +25,12 @@ public class CouponEntity {
         this.id = id;
     }
 
-    public int getNeedPoins() {
-        return needPoins;
+    public int getNeedPoints() {
+        return needPoints;
     }
 
-    public void setNeedPoins(int needPoins) {
-        this.needPoins = needPoins;
+    public void setNeedPoints(int needPoints) {
+        this.needPoints = needPoints;
     }
 
     public int getDuration() {
@@ -49,12 +49,12 @@ public class CouponEntity {
         this.full = full;
     }
 
-    public BigDecimal getSubstract() {
-        return substract;
+    public BigDecimal getSubtract() {
+        return subtract;
     }
 
-    public void setSubstract(BigDecimal substract) {
-        this.substract = substract;
+    public void setSubtract(BigDecimal subtract) {
+        this.subtract = subtract;
     }
 
     public int getIsDelete() {

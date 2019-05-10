@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengfan.bookstore.dao.CouponDao">
+
+    <insert id="insertCouPonGain" parameterType="couponsGainEntity">
+        insert into tb_coupons_gain
+          (coupon_id, user_id, start_time, end_time) values (#{couponID},#{userID},#{startTime},#{endTime})
+    </insert>
+
+    <select id="selectCoupon" resultMap="coupon">
+        select * from tb_coupon where is_delete = 0
+    </select>
+
+    <select id="selectDotUse" resultMap="couponGain">
+        select tcg.* from tb_coupons_gain tcg left join tb_coupon tc on tcg.coupon_id = tc.id
+        where tcg.user_id = #{userID} and unix_timestamp(start_time) &lt;= unix_timestamp()
+          and unix_timestamp(end_time) &gt;= unix_timestamp() and is_use = 0 and tcg.is_delete = 0
+    </select>
+
+    <select id="selectUse" resultMap="couponGain">
+        select tcg.* from tb_coupons_gain tcg left join tb_coupon tc on tcg.coupon_id = tc.id
+        where tcg.user_id = #{userID} and is_use = 1 and tcg.is_delete = 0
+    </select>
+
+    <select id="selectOverdue" resultMap="couponGain">
+        select tcg.* from tb_coupons_gain tcg left join tb_coupon tc on tcg.coupon_id = tc.id
+        where tcg.user_id = #{userID} and unix_timestamp(end_time) &lt; unix_timestamp() and tcg.is_delete = 0
+    </select>
+
+    <update id="deleteCouponsGain">
+        update tb_coupons_gain set is_delete = 1 where id = #{id}
+    </update>
+
+    <update id="updateIsUse">
+        update tb_coupons_gain set is_use = 1 where id = #{id}
+    </update>
+
+    <select id="selectCouponByID" resultMap="coupon">
+        select * from tb_coupon where id = #{id} and is_delete = 0
+    </select>
+
+    <select id="selectMeetCoupon" resultMap="couponGain">
+        select tcg.* from tb_coupons_gain tcg left join tb_coupon tc on tcg.coupon_id = tc.id
+        where tcg.user_id = #{userID} and unix_timestamp(start_time) &lt;= unix_timestamp()
+        and unix_timestamp(end_time) &gt;= unix_timestamp() and is_use != 1
+    </select>
+
+    <resultMap id="coupon" type="com.fengfan.bookstore.entity.CouponEntity">
+        <id property="id" column="id"/>
+        <result property="needPoints" column="need_points"/>
+        <result property="duration" column="duration"/>
+        <result property="full" column="full"/>
+        <result property="subtract" column="subtract"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <resultMap id="couponGain" type="com.fengfan.bookstore.entity.CouponsGainEntity">
+        <id property="id" column="id"/>
+        <result property="couponID" column="coupon_id"/>
+        <result property="userID" column="user_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="isUse" column="is_use"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+</mapper>

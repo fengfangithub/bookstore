@@ -2,6 +2,7 @@ package com.fengfan.bookstore.dao;
 
 import com.fengfan.bookstore.entity.BookShelvesEntity;
 import com.fengfan.bookstore.entity.DetailedEntity;
+import com.fengfan.bookstore.entity.IndexBookEntity;
 import com.fengfan.bookstore.entity.ShowImgEntity;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,7 +26,8 @@ public interface BookShelvesDao {
      * @Description 根据分类ID查询书籍
      * @Exception Exception
      **/
-    List<BookShelvesEntity> selectBookShelvesList(@Param("categoryID") int categoryID, @Param("start") int start, @Param("offset") int offset) throws Exception;
+    List<IndexBookEntity> selectClassBook(@Param("categoryID") int categoryID) throws Exception;
+
 
     /**
      * @return
@@ -35,7 +37,7 @@ public interface BookShelvesDao {
      * @Description 模糊查询上架书籍列表
      * @Exception
      **/
-    List<BookShelvesEntity> selectFuzzyBookShelvesList(@Param("keyword") String keyword, @Param("start") int start, @Param("offset") int offset);
+    List<BookShelvesEntity> selectFuzzyBookShelvesList(@Param("keyword") String keyword);
 
     /**
      * @return
@@ -58,6 +60,37 @@ public interface BookShelvesDao {
     List<ShowImgEntity> selectShowImg(@Param("bookShelvesID") int bookShelvesID) throws Exception;
 
     /**
+     * @Author fengfan
+     * @Date 2019/5/9 16:52
+     * @Paran
+     * @return
+     * @Description 修改销量
+     * @Exception
+     **/
+    int updateSales(BookShelvesEntity bookShelvesEntity) throws Exception;
+
+
+    /**
+     * @Author fengfan
+     * @Date 2019/5/9 16:52
+     * @Paran
+     * @return
+     * @Description 新添上架书
+     * @Exception
+     **/
+    int insertBookShelves(BookShelvesEntity bookShelvesEntity) throws Exception;
+
+    /**
+     * @Author fengfan
+     * @Date 2019/5/9 18:38
+     * @Paran
+     * @return
+     * @Description 修改上架书信息
+     * @Exception
+     **/
+    int updateBookShelves(BookShelvesEntity bookShelvesEntity) throws Exception;
+
+    /**
      * @return
      * @Author fengfan
      * @Date 2019/4/14 15:36
@@ -66,5 +99,12 @@ public interface BookShelvesDao {
      * @Exception
      **/
     List<DetailedEntity> selectDetailed(@Param("bookShelvesID") int bookShelvesID) throws Exception;
+
+    List<IndexBookEntity> selectBookShelvesByDefault(@Param("categoryID") int categoryID) throws Exception;
+    List<IndexBookEntity> selectBookShelvesByTime(@Param("categoryID") int categoryID) throws Exception;
+    List<IndexBookEntity> selectBookShelvesBySales(@Param("categoryID") int categoryID) throws Exception;
+    List<IndexBookEntity> selectBookShelvesByPrice(@Param("categoryID") int categoryID) throws Exception;
+
+    List<IndexBookEntity> selectIndexBook(@Param("categoryID") int categoryID) throws Exception;
 
 }

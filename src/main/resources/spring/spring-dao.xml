@@ -18,10 +18,12 @@
 
     <!-- 注册c3p0数据源 -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="${driver}"/>
-        <property name="jdbcUrl" value="${url}"/>
-        <property name="user" value="${user}"/>
-        <property name="password" value="${password}"/>
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="testConnectionOnCheckin" value="false"/>
+        <property name="testConnectionOnCheckout" value="true"/>
     </bean>
 
     <!-- 注册SqlSessionFactory的对象由于SqlSessionFactory是个接口, 所以配置实现类
@@ -51,6 +53,9 @@
             <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
             <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
             <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="pay*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="recharge" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="convert" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
         </tx:attributes>
     </tx:advice>
 

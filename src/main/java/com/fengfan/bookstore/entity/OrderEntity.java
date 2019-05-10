@@ -18,7 +18,10 @@ public class OrderEntity {
     private int state;  //订单状态
     private int isDelete; //是否删除
     private int bookShelvesID;  //上架图书ID
+    private int addressID;  //地址信息ID
     private int userID;  //用户ID
+    private String leaveMessage;
+    private int isComment;  //是否评论
 
     public int getId() {
         return id;
@@ -84,11 +87,35 @@ public class OrderEntity {
         this.userID = userID;
     }
 
+    public int getAddressID() {
+        return addressID;
+    }
+
+    public void setAddressID(int addressID) {
+        this.addressID = addressID;
+    }
+
     public int getIsDelete() {
         return isDelete;
     }
 
     public void setIsDelete(int isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getLeaveMessage() {
+        return leaveMessage;
+    }
+
+    public void setLeaveMessage(String leaveMessage) {
+        this.leaveMessage = leaveMessage;
+    }
+
+    public int getIsComment() {
+        return isComment;
+    }
+
+    public void setIsComment(int isComment) {
+        this.isComment = isComment;
     }
 }

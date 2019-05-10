@@ -2,7 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fengfan.bookstore.dao.CommentImgDao">
-    <select id="selectCommentImgs" resultMap="commentImg">
+
+    <insert id="insertCommentImage" parameterType="commentImgEntity">
+        insert into tb_comment_img (url, comment_id)
+        values (#{url},#{commentID})
+    </insert>
+
+    <select id="selectCommentImage" resultMap="commentImg">
         select * from tb_comment_img where comment_id = #{commentID}
     </select>
     <resultMap id="commentImg" type="com.fengfan.bookstore.entity.CommentImgEntity">

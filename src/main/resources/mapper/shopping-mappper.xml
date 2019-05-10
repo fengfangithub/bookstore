@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengfan.bookstore.dao.ShoppingCatDao">
+
+    <insert id="insertShoppingCat" parameterType="shoppingCatEntity">
+        insert into tb_shopping_cat (user_id, book_shelves_id, number) values (#{userID},#{bookShelvesID},#{number})
+    </insert>
+
+    <update id="deleteShoppingCat">
+        update tb_shopping_cat set is_delete = 1 where id = #{id}
+    </update>
+
+    <select id="selectShoppingCat" resultMap="shoppingCat">
+        select * from tb_shopping_cat where user_id = #{userID} and is_delete =0
+    </select>
+
+    <resultMap id="shoppingCat" type="com.fengfan.bookstore.entity.ShoppingCatEntity">
+        <id property="id" column="id"/>
+        <result property="userID" column="user_id"/>
+        <result property="number" column="number"/>
+        <result property="bookShelvesID" column="book_shelves_id"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+</mapper>

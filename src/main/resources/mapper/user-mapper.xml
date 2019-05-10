@@ -8,9 +8,19 @@
         select * from tb_user where open_id = #{openID}
     </select>
 
+    <!-- 查询用户支付密码 -->
+    <select id="selectUserPassword" resultType="int">
+        select count(*) from tb_user where id = #{userID} and pay_password = #{password}
+    </select>
+
+    <!-- 查询微信支付密码 -->
+    <select id="selectUserWXPassword" resultType="int">
+        select count(*) from tb_user where id = #{userID} and wx_password = #{wxPassword}
+    </select>
+
     <!-- 插入用户信息 -->
     <insert id="insertUser" parameterType="userEntity">
-        insert into tb_user (sex,name,pay_password,open_id) values (#{sex},#{name},#{payPassword},#{openID})
+        insert into tb_user (sex,name,phone,pay_password,wx_password,open_id) values (#{sex},#{name},#{phone},#{payPassword},#{wxPassword},#{openID})
     </insert>
 
     <update id="updateUser" parameterType="userEntity">
@@ -27,6 +37,7 @@
         <result property="sex" column="sex"/>
         <result property="name" column="name"/>
         <result property="payPassword" column="pay_password"/>
+        <result property="wxPassword" column="wx_password"/>
         <result property="points" column="points"/>
         <result property="balance" column="balance"/>
         <result property="openID" column="open_id"/>

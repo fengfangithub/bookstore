@@ -22,25 +22,49 @@ public interface AddressDao {
      * @Description 查询地址列表
      * @Exception
      **/
-    List<AddressEntity> selectAddress(@Param("userID") int userID) throws Exception;
+    List<AddressEntity> selectAddressList(@Param("userID") int userID) throws Exception;
 
     /**
+     * @return
+     * @Author fengfan
+     * @Date 2019/4/20 13:22
+     * @Paran
+     * @Description 根据默认地址查询地址信息
+     * @Exception
+     **/
+    AddressEntity selectDefaultAddress(@Param("userID") int userID) throws Exception;
+
+    /**
+     * @return
+     * @Author fengfan
+     * @Date 2019/4/22 15:42
+     * @Paran
+     * @Description 根据ID查询地址信息
+     * @Exception
+     **/
+    AddressEntity selectAddress(@Param("addressID") int addressID) throws Exception;
+
+    /**
+     * @return
      * @Author fengfan
      * @Date 2019/4/16 15:07
      * @Paran
-     * @return
      * @Description 添加一个地址信息
      * @Exception
      **/
     int insertAddress(AddressEntity addressEntity) throws Exception;
 
     /**
+     * @return
      * @Author fengfan
      * @Date 2019/4/16 15:08
      * @Paran
-     * @return
      * @Description 修改地址信息
      * @Exception
      **/
-    int udateAddress(AddressEntity addressEntity) throws Exception;
+    int updateAddress(AddressEntity addressEntity) throws Exception;
+
+    int updateDefault(AddressEntity addressEntity) throws Exception;
+
+    int deleteAddress(AddressEntity addressEntity) throws Exception;
 }

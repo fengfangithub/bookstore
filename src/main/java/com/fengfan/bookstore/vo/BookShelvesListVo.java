@@ -10,9 +10,9 @@ import java.math.BigDecimal;
  * @Description 查询上架书籍VO
  * @Version 1.0
  **/
-public class BookShelvesVoList {
+public class BookShelvesListVo {
     private int id;  //上架id
-    private String showImg;  //展示图片
+    private String url;  //展示图片
     private String describe;  //描述
     private BigDecimal price;  //价格
     private int sales;  //销量
@@ -25,12 +25,12 @@ public class BookShelvesVoList {
         this.id = id;
     }
 
-    public String getShowImg() {
-        return showImg;
+    public String getUrl() {
+        return url;
     }
 
-    public void setShowImg(String showImg) {
-        this.showImg = showImg;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getDescribe() {

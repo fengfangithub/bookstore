@@ -3,14 +3,14 @@ package com.fengfan.bookstore.service.impl;
 import com.fengfan.bookstore.dao.BookDao;
 import com.fengfan.bookstore.dao.BookShelvesDao;
 import com.fengfan.bookstore.dao.CategoryDao;
+import com.fengfan.bookstore.dao.CollectionDao;
 import com.fengfan.bookstore.entity.*;
 import com.fengfan.bookstore.service.BookShelvesService;
-import com.fengfan.bookstore.vo.BookShelvesVo;
-import com.fengfan.bookstore.vo.BookShelvesVoList;
+import com.fengfan.bookstore.service.CommentService;
+import com.fengfan.bookstore.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,76 +34,95 @@ public class BookShelvesImpl implements BookShelvesService {
     @Autowired
     private BookDao bookDao;
 
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private CollectionDao collectionDao;
+
     @Override
     public List<CategoryEntity> queryCategory() throws Exception {
         return categoryDao.selectClassifyList();
     }
 
     @Override
-    public List<BookShelvesVoList> queryBookShelvesList(int categoryID, int page) throws Exception {
-        List<BookShelvesVoList> listVo = new ArrayList<>();
-        List<BookShelvesEntity> listEntity = bookShelvesDao.selectBookShelvesList(1, 0, 10);
+    public IndexBookVo queryBookShelvesList() throws Exception {
+        List<CategoryEntity> categoryEntityList = categoryDao.selectClassifyList();
+        List<List<IndexBookEntity>> classBook = new ArrayList<>();
+        for(CategoryEntity categoryEntity : categoryEntityList){
+            List<IndexBookEntity> bookList = bookShelvesDao.selectClassBook(categoryEntity.getId());
+            classBook.add(bookList);
+        }
+        IndexBookVo indexBookVo = new IndexBookVo();
+        indexBookVo.setClassBook(classBook);
+        return indexBookVo;
+    }
+
+    @Override
+    public List<BookShelvesListVo> queryFuzzyBookShelvesList(String keyword) throws Exception {
+        List<BookShelvesListVo> listVo = new ArrayList<>();
+        List<BookShelvesEntity> listEntity = bookShelvesDao.selectFuzzyBookShelvesList(keyword);
         for (BookShelvesEntity bookShelvesEntity : listEntity) {
-            BookShelvesVoList bookShelvesVoList = new BookShelvesVoList();
-            bookShelvesVoList.setId(bookShelvesEntity.getId());
-            bookShelvesVoList.setDescribe(bookShelvesEntity.getDescribe());
-            bookShelvesVoList.setPrice(bookShelvesEntity.getPrice());
-            bookShelvesVoList.setSales(bookShelvesEntity.getSales());
+            BookShelvesListVo bookShelvesListVo = new BookShelvesListVo();
+            bookShelvesListVo.setId(bookShelvesEntity.getId());
+            bookShelvesListVo.setDescribe(bookShelvesEntity.getDescribe());
+            bookShelvesListVo.setPrice(bookShelvesEntity.getPrice());
+            bookShelvesListVo.setSales(bookShelvesEntity.getSales());
             List<ShowImgEntity> listImg = bookShelvesDao.selectShowImg(bookShelvesEntity.getId());
-            bookShelvesVoList.setShowImg(listImg.get(0).getUrl());
-            listVo.add(bookShelvesVoList);
+            bookShelvesListVo.setUrl(listImg.get(0).getUrl());
+            listVo.add(bookShelvesListVo);
         }
         return listVo;
     }
 
     @Override
-    public List<BookShelvesVoList> queryFuzzyBookShelvesList(String keyword, int page) throws Exception {
-        List<BookShelvesVoList> listVo = new ArrayList<>();
-        List<BookShelvesEntity> listEntity = bookShelvesDao.selectFuzzyBookShelvesList(keyword,(page-1)*10,10);
-        for (BookShelvesEntity bookShelvesEntity : listEntity) {
-            BookShelvesVoList bookShelvesVoList = new BookShelvesVoList();
-            bookShelvesVoList.setId(bookShelvesEntity.getId());
-            bookShelvesVoList.setDescribe(bookShelvesEntity.getDescribe());
-            bookShelvesVoList.setPrice(bookShelvesEntity.getPrice());
-            bookShelvesVoList.setSales(bookShelvesEntity.getSales());
-            List<ShowImgEntity> listImg = bookShelvesDao.selectShowImg(bookShelvesEntity.getId());
-            bookShelvesVoList.setShowImg(listImg.get(0).getUrl());
-            listVo.add(bookShelvesVoList);
-        }
-        return listVo;
-    }
-
-    @Override
-    public BookShelvesVo queryBookShelves(int bookShelvesID) throws Exception {
-
+    public BookShelvesVo queryBookShelves(int bookShelvesID,int userID) throws Exception {
         BookShelvesEntity bookShelvesEntity = bookShelvesDao.selectBookShelvesInfo(bookShelvesID);
         List<ShowImgEntity> showImgEntityList = bookShelvesDao.selectShowImg(bookShelvesID);
         List<DetailedEntity> detailedEntityList = bookShelvesDao.selectDetailed(bookShelvesID);
         BookEntity bookEntity = bookDao.selectBookInfo(bookShelvesEntity.getBookID());
+        List<CommentVo> allComment = commentService.queryComment(bookShelvesID);
+        List<CommentVo> highComment = commentService.queryHighReview(bookShelvesID);
+        List<CommentVo> mediumComment = commentService.queryMediumReview(bookShelvesID);
+        List<CommentVo> badComment = commentService.queryBadReview(bookShelvesID);
+        CollectionEntity collectionEntity = collectionDao.selectByBookID(userID,bookShelvesID);
         BookShelvesVo bookShelvesVo = new BookShelvesVo();
-        bookShelvesVo.setId(bookShelvesEntity.getId());
         bookShelvesVo.setBookEntity(bookEntity);
+        bookShelvesVo.setBookShelvesEntity(bookShelvesEntity);
         bookShelvesVo.setShowImgEntityList(showImgEntityList);
         bookShelvesVo.setDetailedEntityList(detailedEntityList);
-        bookShelvesVo.setDescribe(bookShelvesEntity.getDescribe());
-        bookShelvesVo.setOriginalPrice(bookShelvesEntity.getOriginalPrice());
-        bookShelvesVo.setPoints(bookShelvesEntity.getPoints());
-        bookShelvesVo.setPrice(bookShelvesEntity.getPrice());
-        bookShelvesVo.setSales(bookShelvesEntity.getSales());
-        if (bookShelvesEntity.getIsExpressFee() == 1) {
-            bookShelvesVo.setIsExpressFee("包邮");
-            bookShelvesVo.setPostage(new BigDecimal(0));
-        }
-        if (bookShelvesEntity.getIsReal() == 1) {
-            bookShelvesVo.setIsReal("正品保证");
-        }
-        if (bookShelvesEntity.getIsReturn() == 1) {
-            bookShelvesVo.setIsReturn("急速退款");
-        }
-        if (bookShelvesEntity.getIsRefund() == 1) {
-            bookShelvesVo.setIsRefund("七天无理由退换");
-        }
-
+        bookShelvesVo.setAllComment(allComment);
+        bookShelvesVo.setHighComment(highComment);
+        bookShelvesVo.setMediumComment(mediumComment);
+        bookShelvesVo.setBadComment(badComment);
+        bookShelvesVo.setCollectionEntity(collectionEntity);
         return bookShelvesVo;
+    }
+
+    @Override
+    public IndexBookVo queryIndexBook() throws Exception {
+        List<CategoryEntity> categoryEntityList = categoryDao.selectClassifyList();
+        List<List<IndexBookEntity>> classBook = new ArrayList<>();
+        for(CategoryEntity categoryEntity : categoryEntityList){
+            List<IndexBookEntity> bookList = bookShelvesDao.selectIndexBook(categoryEntity.getId());
+            classBook.add(bookList);
+        }
+        IndexBookVo indexBookVo = new IndexBookVo();
+        indexBookVo.setClassBook(classBook);
+        return indexBookVo;
+    }
+
+    @Override
+    public BookShelvesClassVo queryClassBook(int categoryID) throws Exception {
+        List<IndexBookEntity> defaultBook = bookShelvesDao.selectBookShelvesByDefault(categoryID);
+        List<IndexBookEntity> timeBook = bookShelvesDao.selectBookShelvesByTime(categoryID);
+        List<IndexBookEntity> priceBook = bookShelvesDao.selectBookShelvesByPrice(categoryID);
+        List<IndexBookEntity> salesBook = bookShelvesDao.selectBookShelvesBySales(categoryID);
+        BookShelvesClassVo bookShelvesClassVo = new BookShelvesClassVo();
+        bookShelvesClassVo.setBookDefault(defaultBook);
+        bookShelvesClassVo.setBookTime(timeBook);
+        bookShelvesClassVo.setBookPrice(priceBook);
+        bookShelvesClassVo.setBookSales(salesBook);
+        return bookShelvesClassVo;
     }
 }

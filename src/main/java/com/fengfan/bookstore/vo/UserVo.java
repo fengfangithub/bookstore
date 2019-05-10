@@ -13,8 +13,6 @@ public class UserVo {
     private int id;
     private int points;
     private BigDecimal balance;
-    private String openID;
-    private String JESESSIONID;
 
     public int getId() {
         return id;
@@ -38,21 +36,5 @@ public class UserVo {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
-    }
-
-    public String getOpenID() {
-        return openID;
-    }
-
-    public void setOpenID(String openID) {
-        this.openID = openID;
-    }
-
-    public String getJESESSIONID() {
-        return JESESSIONID;
-    }
-
-    public void setJESESSIONID(String JESESSIONID) {
-        this.JESESSIONID = JESESSIONID;
     }
 }

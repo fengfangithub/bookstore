@@ -18,8 +18,8 @@ import java.net.URLConnection;
  * @Version 1.0
  **/
 public class WXUtil {
-    private static final String APPID = "wxa27501b80c7b878e";
-    private static final String SECRET = "56cd6f5066a5bc9a17d91df030b170af";
+    private static final String APPID = "wxdc69863107ce6580";
+    private static final String SECRET = "5aff3ec0fd91c299c14a88ec3b8f9cfd";
 
     public static WXUserVo loginCheck(String code) throws Exception {
         URL url = new URL("https://api.weixin.qq.com/sns/jscode2session?appid="
@@ -34,6 +34,9 @@ public class WXUtil {
         }
         ObjectMapper objectMapper = new ObjectMapper();
         WXUserVo wxUserVo = objectMapper.readValue(sb.toString(), WXUserVo.class);
+//        WXUserVo wxUserVo = new WXUserVo();
+//        wxUserVo.setOpenid("osqrb4s5UzkkTHV9OVAmuRgQIDn8");
+//        wxUserVo.setSession_key("Hlf8nnGAynZehMQ6brHxkg==");
         return wxUserVo;
     }
 

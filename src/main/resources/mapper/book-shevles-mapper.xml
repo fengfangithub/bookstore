@@ -3,17 +3,58 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fengfan.bookstore.dao.BookShelvesDao">
 
-    <!-- 分类分页查询上架书籍列表 -->
-    <select id="selectBookShelvesList" resultMap="bookShelves">
-        select * from tb_book_shelves where category_id = #{categoryID} and is_delete = 0 limit #{start},#{offset}
+    <!-- 主页查询 -->
+    <select id="selectIndexBook" resultMap="indexBook">
+        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
+        (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
+        on a.id = c.book_shelves_id
+        where a.category_id = #{categoryID} limit 0,6;
     </select>
+
+    <!-- 分类查询上架书籍列表 -->
+    <select id="selectClassBook" resultMap="indexBook">
+        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
+         (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
+        on a.id = c.book_shelves_id
+        where a.category_id = #{categoryID}
+    </select>
+
+    <!-- 修改销量 -->
+    <update id="updateSales" parameterType="bookShelvesEntity">
+        update tb_book_shelves set sales = sales + #{sales} where id = #{id}
+    </update>
+
+    <!-- 插入上架 -->
+    <insert id="insertBookShelves" parameterType="bookShelvesEntity">
+          insert into tb_book_shelves (book_id, category_id, 'describe',create_time,price,original_price,postage,points)
+          values (#{bookID},#{categoryID},#{describe},sysdate(),#{price},#{originalPrice},#{postage},#{points})
+    </insert>
+
+    <!-- 修改上架书信息 -->
+    <update id="updateBookShelves" parameterType="bookShelvesEntity">
+        update tb_book_shelves
+         <set>
+              <if test="describe != null">'describe' = #{describe},</if>
+              <if test="price != null and price != 0">price = #{price},</if>
+              <if test="isExpressFee != null and isExpressFee != 0">is_express_fee = #{isExpressFee},</if>
+              <if test="isReal != null and isReal != 0">is_real = #{isReal},</if>
+              <if test="isReturn != null and isReturn != 0">is_return = #{isReturn},</if>
+              <if test="isRefund != null and isRefund != 0">is_refund = #{isRefund},</if>
+              <if test="originalPrice != null and originalPrice != 0">original_price = #{originalPrice},</if>
+              <if test="postage != null and postage != 0">postage = #{postage},</if>
+              <if test="points != null and points != 0">points = #{points}</if>
+         </set>
+    </update>
+
 
     <!-- 模糊查询上架书籍列表 -->
     <select id="selectFuzzyBookShelvesList" resultMap="bookShelves">
         select shelves.* from tb_book_shelves as shelves left join tb_book as book
         on shelves.book_id = book.id where book.name like concat('%',#{keyword},'%') or
         shelves.describe like concat('%',#{keyword},'%') or book.author like concat('%',#{keyword},'%')
-        or book.press like concat('%',#{keyword},'%') limit #{start},#{offset}
+        or book.press like concat('%',#{keyword},'%')
     </select>
 
     <!-- 查询上架信息 -->
@@ -30,6 +71,46 @@
     <select id="selectDetailed" resultMap="detailed">
         select * from tb_detailed where book_shelves_id = #{bookShelvesID}
     </select>
+
+    <!-- 根据排序规则查询分类 -->
+    <select id="selectBookShelvesByDefault" resultMap="indexBook">
+        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
+             (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
+             on a.id = c.book_shelves_id
+        where a.category_id = #{categoryID}
+    </select>
+    <select id="selectBookShelvesByTime" resultMap="indexBook">
+        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
+             (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
+             on a.id = c.book_shelves_id
+        where a.category_id = #{categoryID} order by a.create_time desc
+    </select>
+    <select id="selectBookShelvesBySales" resultMap="indexBook">
+        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
+             (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
+             on a.id = c.book_shelves_id
+        where a.category_id = #{categoryID} order by a.price desc
+    </select>
+    <select id="selectBookShelvesByPrice" resultMap="indexBook">
+        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
+             (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
+             on a.id = c.book_shelves_id
+        where a.category_id = #{categoryID} order by a.sales desc
+    </select>
+
+    <resultMap id="indexBook" type="com.fengfan.bookstore.entity.IndexBookEntity">
+        <id property="bookID" column="book_id"/>
+        <result property="price" column="price"/>
+        <result property="sales" column="sales"/>
+        <result property="describe" column="describe"/>
+        <result property="categoryID" column="category_id"/>
+        <result property="name" column="name"/>
+        <result property="url" column="url"/>
+    </resultMap>
 
     <resultMap id="bookShelves" type="com.fengfan.bookstore.entity.BookShelvesEntity">
         <id property="id" column="id"/>

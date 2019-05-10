@@ -4,8 +4,10 @@ import com.fengfan.bookstore.entity.CategoryEntity;
 import com.fengfan.bookstore.service.BookShelvesService;
 import com.fengfan.bookstore.tool.BaseResponse;
 import com.fengfan.bookstore.tool.StatusCode;
+import com.fengfan.bookstore.vo.BookShelvesClassVo;
+import com.fengfan.bookstore.vo.BookShelvesListVo;
 import com.fengfan.bookstore.vo.BookShelvesVo;
-import com.fengfan.bookstore.vo.BookShelvesVoList;
+import com.fengfan.bookstore.vo.IndexBookVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +31,9 @@ public class BookShelvesController {
 
     @RequestMapping("/class")
     @ResponseBody
-    public BaseResponse<List<CategoryEntity>> queryCategory(){
+    public BaseResponse<List<CategoryEntity>> queryCategory() {
         try {
-            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS,bookShelvesService.queryCategory());
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS, bookShelvesService.queryCategory());
         } catch (Exception e) {
             e.printStackTrace();
             return new BaseResponse<>(StatusCode.BOOK_QUERY_FAIL);
@@ -40,9 +42,9 @@ public class BookShelvesController {
 
     @RequestMapping("/shelves-list")
     @ResponseBody
-    public BaseResponse<List<BookShelvesVoList>> queryBookShelvesList(int categoryID, int page){
+    public BaseResponse<IndexBookVo> queryBookShelvesList() {
         try {
-            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS,bookShelvesService.queryBookShelvesList(categoryID,page));
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS, bookShelvesService.queryBookShelvesList());
         } catch (Exception e) {
             e.printStackTrace();
             return new BaseResponse<>(StatusCode.BOOK_QUERY_FAIL);
@@ -51,9 +53,42 @@ public class BookShelvesController {
 
     @RequestMapping("/shelves")
     @ResponseBody
-    public BaseResponse<BookShelvesVo> queryBookShelves(int bookShelvesID){
+    public BaseResponse<BookShelvesVo> queryBookShelves(int bookShelvesID,int userID) {
         try {
-            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS,bookShelvesService.queryBookShelves(bookShelvesID));
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS, bookShelvesService.queryBookShelves(bookShelvesID,userID));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_FAIL);
+        }
+    }
+
+    @RequestMapping("/index-book")
+    @ResponseBody
+    public BaseResponse<IndexBookVo> queryIndexBookShelves() {
+        try {
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS, bookShelvesService.queryIndexBook());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_FAIL);
+        }
+    }
+
+    @RequestMapping("/class-book")
+    @ResponseBody
+    public BaseResponse<BookShelvesClassVo> queryClassBookShelves(int categoryID) {
+        try {
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS, bookShelvesService.queryClassBook(categoryID));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_FAIL);
+        }
+    }
+
+    @RequestMapping("/fuzzy-list")
+    @ResponseBody
+    public BaseResponse<List<BookShelvesListVo>> queryFuzzyBookShelvesList(String keyword) {
+        try {
+            return new BaseResponse<>(StatusCode.BOOK_QUERY_SUCCESS, bookShelvesService.queryFuzzyBookShelvesList(keyword));
         } catch (Exception e) {
             e.printStackTrace();
             return new BaseResponse<>(StatusCode.BOOK_QUERY_FAIL);

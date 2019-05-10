@@ -14,10 +14,9 @@ public class CommentEntity {
     private String userName;  //评价用户名
     private String userUrl;  //评价用户头像
     private int star;  //评价星级
-    private int level;  //评价等级
     private String content;  //评价内容
     private String createDate;  //评价时间
-    private int BookSelvesID;  //上架商品ID
+    private int bookShelvesID;  //上架商品ID
     private int isDelete; //是否删除
 
     public int getId() {
@@ -52,14 +51,6 @@ public class CommentEntity {
         this.star = star;
     }
 
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public String getContent() {
         return content;
     }
@@ -76,12 +67,12 @@ public class CommentEntity {
         this.createDate = createDate;
     }
 
-    public int getBookSelvesID() {
-        return BookSelvesID;
+    public int getBookShelvesID() {
+        return bookShelvesID;
     }
 
-    public void setBookSelvesID(int bookSelvesID) {
-        BookSelvesID = bookSelvesID;
+    public void setBookShelvesID(int bookShelvesID) {
+        this.bookShelvesID = bookShelvesID;
     }
 
     public int getIsDelete() {
