@@ -8,6 +8,10 @@
         select * from tb_user where open_id = #{openID}
     </select>
 
+    <select id="selectByID" resultMap="user">
+        select * from tb_user where id = #{id}
+    </select>
+
     <!-- 查询用户支付密码 -->
     <select id="selectUserPassword" resultType="int">
         select count(*) from tb_user where id = #{userID} and pay_password = #{password}

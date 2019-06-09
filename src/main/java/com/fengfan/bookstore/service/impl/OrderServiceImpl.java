@@ -211,20 +211,23 @@ public class OrderServiceImpl implements OrderService {
         int r1 = userDao.selectUserPassword(userID, password);
         OrderEntity orderEntity = orderDao.selectOrder(orderID);
         BookShelvesEntity bookShelvesEntity = bookShelvesDao.selectBookShelvesInfo(orderEntity.getBookShelvesID());
+
         OrderEntity  orderEntityUpdate = new OrderEntity();
         orderEntityUpdate.setUserID(userID);
         orderEntityUpdate.setState(2);
         orderEntityUpdate.setId(orderID);
+
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userID);
         userEntity.setPoints(bookShelvesEntity.getPoints());
         userEntity.setBalance(orderEntity.getPrice().negate());
+
         if(r1==1){
             int r2 = userDao.updateUser(userEntity);
             if(r2==1){
                 BookShelvesEntity bookShelvesEntity1 = new BookShelvesEntity();
-                bookShelvesEntity.setId(bookShelvesEntity.getId());
-                bookShelvesEntity.setSales(1);
+                bookShelvesEntity1.setId(bookShelvesEntity.getId());
+                bookShelvesEntity1.setSales(orderEntity.getNumber());
                 bookShelvesDao.updateSales(bookShelvesEntity1);
                 orderDao.updateOrder(orderEntityUpdate);
                 return 1;

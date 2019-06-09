@@ -1,6 +1,9 @@
 package com.fengfan.bookstore.dao;
 
 import com.fengfan.bookstore.entity.AdminEntity;
+import com.fengfan.bookstore.entity.OrderEntity;
+
+import java.util.List;
 
 /**
  * @ClassName AdminDao
@@ -11,4 +14,9 @@ import com.fengfan.bookstore.entity.AdminEntity;
  **/
 public interface AdminDao {
     int selectAdmin(AdminEntity adminEntity) throws Exception;
+
+    List<OrderEntity> selectOrder() throws Exception;
+
+    List<OrderEntity> selectRefund() throws Exception;
+
 }

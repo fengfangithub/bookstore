@@ -91,7 +91,19 @@ public enum StatusCode {
     COUPON_QUERY_FAIL(7012, "优惠券查询失败"),
 
     COUPON_INSERT_SUCCESS(7021, "优惠券获取成功"),
-    COUPON_INSERT_FAIL(7021, "优惠券获取成功")
+    COUPON_INSERT_NOT(7023, "积分不足"),
+    COUPON_INSERT_FAIL(7022, "优惠券获取成功"),
+
+    ADMIN_INSERT_SHELVES_SUCCESS(8011,"上架成功"),
+    ADMIN_INSERT_BOOK_SUCCESS(8021,"添加成功"),
+    ADMIN_LOGIN_SUCCESS(8031,"登陆成功"),
+    ADMIN_LOGIN_FAIL(8032,"登陆失败"),
+    ADMIN_DELIVERY_SUCCESS(8041,"发货成功"),
+    ADMIN_DELIVERY_FAIL(8042,"发货失败"),
+    ADMIN_REFUND_SUCCESS(8051,"退货成功"),
+    ADMIN_REFUND_FAIL(8052,"退货失败"),
+    ADMIN_UPDATE_SUCCESS(8061,"修改成功"),
+    ADMIN_UPDATE_FAIL(8062,"修改失败")
     ;
 
     private Integer code;

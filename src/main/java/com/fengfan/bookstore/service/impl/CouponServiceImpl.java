@@ -1,8 +1,10 @@
 package com.fengfan.bookstore.service.impl;
 
 import com.fengfan.bookstore.dao.CouponDao;
+import com.fengfan.bookstore.dao.UserDao;
 import com.fengfan.bookstore.entity.CouponEntity;
 import com.fengfan.bookstore.entity.CouponsGainEntity;
+import com.fengfan.bookstore.entity.UserEntity;
 import com.fengfan.bookstore.service.CouponService;
 import com.fengfan.bookstore.vo.CouponGainVo;
 import com.fengfan.bookstore.vo.CouponVo;
@@ -29,22 +31,35 @@ public class CouponServiceImpl implements CouponService {
     @Autowired
     private CouponDao couponDao;
 
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public int insertCouponGain(int couponID,int userID,int duration) throws Exception {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:dd");
-        Date date = new Date();
-        String starTime= simpleDateFormat.format(date);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DATE,duration);
-        date = calendar.getTime();
-        String endTime = simpleDateFormat.format(date);
-        CouponsGainEntity couponsGainEntity = new CouponsGainEntity();
-        couponsGainEntity.setCouponID(couponID);
-        couponsGainEntity.setUserID(userID);
-        couponsGainEntity.setStartTime(starTime);
-        couponsGainEntity.setEndTime(endTime);
-        return couponDao.insertCouPonGain(couponsGainEntity);
+        CouponEntity couponEntity = couponDao.selectCouponByID(couponID);
+        UserEntity userEntity = userDao.selectByID(userID);
+        if(userEntity.getPoints()<couponEntity.getNeedPoints()){
+            return 0;
+        }else{
+            UserEntity userEntityUp = new UserEntity();
+            userEntityUp.setId(userID);
+            userEntityUp.setPoints(-couponEntity.getNeedPoints());
+            userDao.updateUser(userEntityUp);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:dd");
+            Date date = new Date();
+            String starTime= simpleDateFormat.format(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DATE,duration);
+            date = calendar.getTime();
+            String endTime = simpleDateFormat.format(date);
+            CouponsGainEntity couponsGainEntity = new CouponsGainEntity();
+            couponsGainEntity.setCouponID(couponID);
+            couponsGainEntity.setUserID(userID);
+            couponsGainEntity.setStartTime(starTime);
+            couponsGainEntity.setEndTime(endTime);
+            return couponDao.insertCouPonGain(couponsGainEntity);
+        }
     }
 
     @Override

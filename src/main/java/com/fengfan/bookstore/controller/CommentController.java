@@ -42,12 +42,16 @@ public class CommentController {
     public BaseResponse addCommentImage(@RequestParam("file") MultipartFile file, int commentID, HttpServletRequest request) {
         try {
             String path = request.getSession().getServletContext().getRealPath("imag/comment");
+            File fileDir = new File(path);
+            if(!fileDir.exists()){
+                fileDir.mkdirs();
+            }
             if (!file.isEmpty()) {
                 String fileName = file.getOriginalFilename();
                 file.transferTo(new File(path + File.separator + fileName));
                 CommentImgEntity commentImgEntity = new CommentImgEntity();
                 commentImgEntity.setCommentID(commentID);
-                commentImgEntity.setUrl("http://ffhp.mystery0.vip:8080/bookstore/imag/comment/" + fileName);
+                commentImgEntity.setUrl("https://fengfan.xhban.com/bookstore/imag/comment/" + fileName);
                 commentService.insertCommentImage(commentImgEntity);
                 return new BaseResponse(StatusCode.COMMENT_IMAGE_ADD_SUCCESS);
             } else {

@@ -5,7 +5,7 @@
 
     <!-- 主页查询 -->
     <select id="selectIndexBook" resultMap="indexBook">
-        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        select a.id as book_id,a.describe_book,a.price,a.sales,b.id as category_id,b.name,c.url
         from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
         (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
         on a.id = c.book_shelves_id
@@ -14,7 +14,7 @@
 
     <!-- 分类查询上架书籍列表 -->
     <select id="selectClassBook" resultMap="indexBook">
-        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        select a.id as book_id,a.describe_book,a.price,a.sales,b.id as category_id,b.name,c.url
         from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
          (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
         on a.id = c.book_shelves_id
@@ -27,8 +27,8 @@
     </update>
 
     <!-- 插入上架 -->
-    <insert id="insertBookShelves" parameterType="bookShelvesEntity">
-          insert into tb_book_shelves (book_id, category_id, 'describe',create_time,price,original_price,postage,points)
+    <insert id="insertBookShelves" parameterType="bookShelvesEntity" useGeneratedKeys="true" keyProperty="id">
+          insert into tb_book_shelves (book_id, category_id,describe_book,create_time,price,original_price,postage,points)
           values (#{bookID},#{categoryID},#{describe},sysdate(),#{price},#{originalPrice},#{postage},#{points})
     </insert>
 
@@ -48,12 +48,22 @@
          </set>
     </update>
 
+    <!-- 插入展示图片 -->
+    <insert id="insertShowImage" parameterType="showImgEntity">
+        insert into tb_show_img (url, book_shelves_id) values (#{url},#{bookShelvesID})
+    </insert>
+
+    <!-- 插入书籍详情 -->
+    <insert id="insertDetailed" parameterType="detailedEntity">
+        insert into tb_detailed (url, book_shelves_id) values (#{url},#{bookShelvesID})
+    </insert>
+
 
     <!-- 模糊查询上架书籍列表 -->
     <select id="selectFuzzyBookShelvesList" resultMap="bookShelves">
         select shelves.* from tb_book_shelves as shelves left join tb_book as book
         on shelves.book_id = book.id where book.name like concat('%',#{keyword},'%') or
-        shelves.describe like concat('%',#{keyword},'%') or book.author like concat('%',#{keyword},'%')
+        shelves.describe_book like concat('%',#{keyword},'%') or book.author like concat('%',#{keyword},'%')
         or book.press like concat('%',#{keyword},'%')
     </select>
 
@@ -74,39 +84,39 @@
 
     <!-- 根据排序规则查询分类 -->
     <select id="selectBookShelvesByDefault" resultMap="indexBook">
-        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        select a.id as book_id,a.describe_book,a.price,a.sales,b.id as category_id,b.name,c.url
         from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
              (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
              on a.id = c.book_shelves_id
         where a.category_id = #{categoryID}
     </select>
     <select id="selectBookShelvesByTime" resultMap="indexBook">
-        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        select a.id as book_id,a.describe_book,a.price,a.sales,b.id as category_id,b.name,c.url
         from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
              (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
              on a.id = c.book_shelves_id
-        where a.category_id = #{categoryID} order by a.create_time desc
+        where a.category_id = #{categoryID} order by a.create_time desc,a.id asc
     </select>
     <select id="selectBookShelvesBySales" resultMap="indexBook">
-        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        select a.id as book_id,a.describe_book,a.price,a.sales,b.id as category_id,b.name,c.url
         from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
              (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
              on a.id = c.book_shelves_id
-        where a.category_id = #{categoryID} order by a.price desc
+        where a.category_id = #{categoryID} order by a.sales desc,a.id asc
     </select>
     <select id="selectBookShelvesByPrice" resultMap="indexBook">
-        select a.id as book_id,a.describe,a.price,a.sales,b.id as category_id,b.name,c.url
+        select a.id as book_id,a.describe_book,a.price,a.sales,b.id as category_id,b.name,c.url
         from (tb_book_shelves as a left join tb_category as b on a.category_id = b.id) left join
              (select * from tb_show_img where id in (select min(id) from tb_show_img group by book_shelves_id))as c
              on a.id = c.book_shelves_id
-        where a.category_id = #{categoryID} order by a.sales desc
+        where a.category_id = #{categoryID} order by a.price desc,a.id asc
     </select>
 
     <resultMap id="indexBook" type="com.fengfan.bookstore.entity.IndexBookEntity">
         <id property="bookID" column="book_id"/>
         <result property="price" column="price"/>
         <result property="sales" column="sales"/>
-        <result property="describe" column="describe"/>
+        <result property="describe" column="describe_book"/>
         <result property="categoryID" column="category_id"/>
         <result property="name" column="name"/>
         <result property="url" column="url"/>
@@ -116,7 +126,7 @@
         <id property="id" column="id"/>
         <result property="bookID" column="book_id"/>
         <result property="categoryID" column="category_id"/>
-        <result property="describe" column="describe"/>
+        <result property="describe" column="describe_book"/>
         <result property="price" column="price"/>
         <result property="isExpressFee" column="is_express_fee"/>
         <result property="isReal" column="is_real"/>

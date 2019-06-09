@@ -8,6 +8,10 @@
         select * from tb_book where id = ${bookID} and is_delete != 1
     </select>
 
+    <insert id="insertBook" parameterType="bookEntity">
+        insert into tb_book (name, author, press, publication_date, isbn) values (#{name},#{author},#{press},#{publicationDate},#{ISBN})
+    </insert>
+
     <resultMap id="book" type="com.fengfan.bookstore.entity.BookEntity">
         <id property="id" column="id"/>
         <result property="name" column="name"/>

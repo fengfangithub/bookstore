@@ -65,7 +65,7 @@ public interface UserService {
      * @Description 充值
      * @Exception
      **/
-    int recharge(int userID, BigDecimal money, String wxPassword) throws Exception;
+    int recharge(int userID, BigDecimal money) throws Exception;
 
     /**
      * @return

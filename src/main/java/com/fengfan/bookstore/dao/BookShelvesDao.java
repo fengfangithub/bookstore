@@ -91,6 +91,26 @@ public interface BookShelvesDao {
     int updateBookShelves(BookShelvesEntity bookShelvesEntity) throws Exception;
 
     /**
+     * @Author fengfan
+     * @Date 2019/5/13 14:02
+     * @Paran
+     * @return
+     * @Description 插入展示图片
+     * @Exception
+     **/
+    int insertShowImage(ShowImgEntity showImgEntity) throws Exception;
+
+    /**
+     * @Author fengfan
+     * @Date 2019/5/13 14:03
+     * @Paran
+     * @return
+     * @Description 插入详细图片
+     * @Exception
+     **/
+    int insertDetailed(DetailedEntity detailedEntity) throws Exception;
+
+    /**
      * @return
      * @Author fengfan
      * @Date 2019/4/14 15:36

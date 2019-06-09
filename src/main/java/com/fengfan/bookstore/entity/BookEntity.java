@@ -13,7 +13,6 @@ public class BookEntity {
     private String author;  //图书作者
     private String press;  //图书出版社
     private String publicationDate; //出版时间
-    private int categoryID;  //图书类型id
     private String ISBN;  //图书编号
     private int isDelete;  //是否删除
 
@@ -55,14 +54,6 @@ public class BookEntity {
 
     public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
-    }
-
-    public int getCategoryID() {
-        return categoryID;
-    }
-
-    public void setCategoryID(int categoryID) {
-        this.categoryID = categoryID;
     }
 
     public String getISBN() {

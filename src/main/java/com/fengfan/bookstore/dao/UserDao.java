@@ -22,6 +22,8 @@ public interface UserDao {
      **/
     UserEntity selectUser(String openID) throws Exception;
 
+    UserEntity selectByID(int id) throws Exception;
+
     /**
      * @return
      * @Author fengfan

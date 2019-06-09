@@ -51,10 +51,13 @@ public class CouponController {
     @RequestMapping("/add")
     public BaseResponse addCoupon(int userID, int couponID, int duration) {
         try {
-            int result = couponService.insertCouponGain(userID, couponID, duration);
+            int result = couponService.insertCouponGain(couponID, userID, duration);
             if (result == 1) {
                 return new BaseResponse(StatusCode.COUPON_INSERT_SUCCESS);
-            } else {
+            } else if(result ==0){
+                return new BaseResponse(StatusCode.COUPON_INSERT_NOT);
+            }
+            else {
                 return new BaseResponse(StatusCode.COUPON_INSERT_FAIL);
             }
         } catch (Exception e) {

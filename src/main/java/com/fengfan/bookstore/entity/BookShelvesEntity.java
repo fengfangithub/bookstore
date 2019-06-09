@@ -21,7 +21,7 @@ public class BookShelvesEntity {
     private int isDelete;  //是否删除
     private BigDecimal postage;  //邮费
     private int sales;  //销量
-    private int CategoryID;  //分类ID
+    private int categoryID;  //分类ID
     private String describe;  //上架书描述
     private int points;  //获得积分
 
@@ -114,11 +114,11 @@ public class BookShelvesEntity {
     }
 
     public int getCategoryID() {
-        return CategoryID;
+        return categoryID;
     }
 
     public void setCategoryID(int categoryID) {
-        CategoryID = categoryID;
+        this.categoryID = categoryID;
     }
 
     public String getDescribe() {
@@ -135,5 +135,25 @@ public class BookShelvesEntity {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    @Override
+    public String toString() {
+        return "BookShelvesEntity{" +
+                "id=" + id +
+                ", bookID=" + bookID +
+                ", originalPrice=" + originalPrice +
+                ", price=" + price +
+                ", isExpressFee=" + isExpressFee +
+                ", isReal=" + isReal +
+                ", isReturn=" + isReturn +
+                ", isRefund=" + isRefund +
+                ", isDelete=" + isDelete +
+                ", postage=" + postage +
+                ", sales=" + sales +
+                ", categoryID=" + categoryID +
+                ", describe='" + describe + '\'' +
+                ", points=" + points +
+                '}';
     }
 }

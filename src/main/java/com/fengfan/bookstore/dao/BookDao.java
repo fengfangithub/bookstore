@@ -24,4 +24,6 @@ public interface BookDao {
      **/
     BookEntity selectBookInfo(@Param("bookID") int bookID) throws Exception;
 
+    int insertBook(BookEntity bookEntity) throws Exception;
+
 }

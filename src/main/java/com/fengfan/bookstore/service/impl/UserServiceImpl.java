@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
                     }
                     BookShelvesEntity bookShelvesEntity = new BookShelvesEntity();
                     bookShelvesEntity.setId(payVo.getBookShelvesID());
-                    bookShelvesEntity.setSales(1);
+                    bookShelvesEntity.setSales(payVo.getNum());
                     bookShelvesDao.updateSales(bookShelvesEntity);
                 }
             } else {
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
                         couponDao.updateIsUse(payVo.getCouponID());
                     }
                 }
-            }else {
+            } else {
                 orderDao.insertOrder(orderEntity);
             }
         }
@@ -160,15 +160,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int recharge(int userID, BigDecimal money, String wxPassword) throws Exception {
-        if (userDao.selectUserWXPassword(userID, wxPassword) == 1) {
-            UserEntity userEntity = new UserEntity();
-            userEntity.setId(userID);
-            userEntity.setBalance(money);
-            userDao.updateUser(userEntity);
-            return 1;
-        }
-        return 0;
+    public int recharge(int userID, BigDecimal money) throws Exception {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(userID);
+        userEntity.setBalance(money);
+        return userDao.updateUser(userEntity);
     }
 
     @Override

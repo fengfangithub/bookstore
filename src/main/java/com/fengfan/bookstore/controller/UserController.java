@@ -132,16 +132,14 @@ public class UserController {
 
     @RequestMapping("/recharge")
     @ResponseBody
-    public BaseResponse recharge(int userID, BigDecimal money, String wxPassword) {
+    public BaseResponse recharge(int userID, BigDecimal money) {
         try {
-            int result = userService.recharge(userID, money, wxPassword);
-            if (result == 0) {
-                return new BaseResponse(StatusCode.USER_RECHARGE_PASSWORD_FAIL);
-            }
+            int result = userService.recharge(userID, money);
             if (result == 1) {
                 return new BaseResponse(StatusCode.USER_RECHARGE_SUCCESS);
+            }else{
+                return new BaseResponse(StatusCode.USER_RECHARGE_FAIL);
             }
-            return new BaseResponse(StatusCode.USER_RECHARGE_FAIL);
         } catch (Exception e) {
             e.printStackTrace();
             return new BaseResponse(StatusCode.EXCEPTION);
